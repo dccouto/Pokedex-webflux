@@ -31,4 +31,9 @@ public class PokemonServiceImpl implements PokemonService{
 		return pokemonRepository.findById(id);
 	}
 
+	@Override
+	public Flux<Pokemon> buscaPorNome(String name) {
+		return pokemonRepository.findByName(name);
+	}
+
 }
