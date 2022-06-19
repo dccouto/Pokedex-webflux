@@ -1,7 +1,5 @@
 package com.couto.pokedex.entities;
 
-import java.util.UUID;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
