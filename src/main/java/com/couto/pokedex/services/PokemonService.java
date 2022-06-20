@@ -9,4 +9,5 @@ public interface PokemonService extends genericService<Pokemon, Long> {
 	
 	Flux<Pokemon> buscaPorNome(String name);
 
+		
 }

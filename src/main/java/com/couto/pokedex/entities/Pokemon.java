@@ -6,8 +6,10 @@ import org.springframework.data.relational.core.mapping.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.With;
 
 @Data
+@With
 @AllArgsConstructor
 @NoArgsConstructor
 @Table("TB_POKEMON")
