@@ -46,6 +46,7 @@ public class GlobalExceptionHandlers extends AbstractErrorWebExceptionHandler {
 	private Mono<ServerResponse> sendResponseExceptionRequest(ServerRequest request) {
 
 		Map<String, Object> errorAttributesMap = super.getErrorAttributes(request, ErrorAttributeOptions.defaults());
+		errorAttributesMap.put("Message", super.getError(request).getMessage());
 
 		int status = (int) Optional.ofNullable(errorAttributesMap.get("status")).orElse(500);
 
