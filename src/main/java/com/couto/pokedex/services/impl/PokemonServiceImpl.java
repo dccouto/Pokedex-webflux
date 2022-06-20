@@ -1,6 +1,8 @@
 package com.couto.pokedex.services.impl;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.couto.pokedex.entities.Pokemon;
 import com.couto.pokedex.repositories.PokemonRepository;
@@ -18,7 +20,7 @@ public class PokemonServiceImpl implements PokemonService{
 
 	@Override
 	public Mono<Pokemon> save(Pokemon pokemon) {
-		return pokemonRepository.save(pokemon);
+		return pokemonRepository.save(pokemon).log();
 	}
 
 	@Override
@@ -28,7 +30,15 @@ public class PokemonServiceImpl implements PokemonService{
 
 	@Override
 	public Mono<Pokemon> findById(Long id) {
-		return pokemonRepository.findById(id);
+		return pokemonRepository
+				.findById(id)
+				.switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "Pokemon not found")))
+				.log();
+	}
+
+	@Override
+	public Flux<Pokemon> buscaPorNome(String name) {
+		return pokemonRepository.findByName(name);
 	}
 
 }
