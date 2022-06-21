@@ -8,8 +8,8 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.couto.pokedex.entities.Pokemon;
 import com.couto.pokedex.exceptions.PokedexException;
@@ -119,12 +119,40 @@ class PokemonServiceImplTest {
 	}
 	
 	@Test
-	@DisplayName("save return Mono of Pokemon when pokemon is saved")
+	@DisplayName("update return Exception when pokemon dont extist")
+	void update_returnMonoErros_whenEmptyMonoIsReturned_test() {
+		
+		BDDMockito.when(pokemonRepository.findById(ArgumentMatchers.anyLong()))
+			.thenReturn(Mono.empty());
+		
+		StepVerifier.create(pokemonService.update(pokemonValidUpdate))
+			.expectSubscription()
+			.expectError(PokedexException.class)
+			.verify();
+		
+	}
+	
+	@Test
+	@DisplayName("delete return Mono empty when pokemon is deleted")
 	void delete_returnMonoEmpty_whenMonoOfPokemonIsDelete_test() {
 		
 		StepVerifier.create(pokemonService.delete(ArgumentMatchers.anyLong()))
 			.expectSubscription()
 			.verifyComplete();
+		
+	}
+	
+	@Test
+	@DisplayName("delete return Exception when pokemon dont extist")
+	void delete_returnMonoErros_whenEmptyMonoIsReturned_test() {
+		
+		BDDMockito.when(pokemonRepository.findById(ArgumentMatchers.anyLong()))
+			.thenReturn(Mono.empty());
+		
+		StepVerifier.create(pokemonService.delete(ArgumentMatchers.anyLong()))
+			.expectSubscription()
+			.expectError(PokedexException.class)
+			.verify();
 		
 	}
 
