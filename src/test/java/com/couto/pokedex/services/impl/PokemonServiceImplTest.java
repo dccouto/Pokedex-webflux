@@ -24,6 +24,7 @@ class PokemonServiceImplTest {
 	
 	private static Pokemon pokemonValid = createValidPokemon();
 	private static Pokemon pokemonToBeSaved = createPokemonToBeSaved();
+	private static Pokemon pokemonValidUpdate = createValidUpdatePokemon();
 	
 	@InjectMocks
 	private PokemonServiceImpl pokemonService;
@@ -42,6 +43,12 @@ class PokemonServiceImplTest {
 		
 		BDDMockito.when(pokemonRepository.findByName(ArgumentMatchers.anyString()))
 			.thenReturn(Flux.just(pokemonValid));
+		
+		BDDMockito.when(pokemonRepository.save(pokemonToBeSaved))
+			.thenReturn(Mono.just(pokemonValid));
+		
+		BDDMockito.when(pokemonRepository.delete(pokemonValid))
+			.thenReturn(Mono.empty());
 	}
 	
 	@Test
@@ -76,7 +83,7 @@ class PokemonServiceImplTest {
 	
 	@Test
 	@DisplayName("findById return Mono error when pokemon does not exist")
-	void findById_returnMonoOfPokemon_whenEmptyMonoIsReturned_test() {
+	void findById_returnMonoError_whenEmptyMonoIsReturned_test() {
 		BDDMockito.when(pokemonRepository.findById(ArgumentMatchers.anyLong()))
 			.thenReturn(Mono.empty());
 		
@@ -84,6 +91,40 @@ class PokemonServiceImplTest {
 			.expectSubscription()
 			.expectError(PokedexException.class)
 			.verify();
+		
+	}
+	
+	@Test
+	@DisplayName("save return Mono of Pokemon when pokemon is saved")
+	void save_returnMonoOfPokemon_whenMonoOfPokemonIsSaved_test() {
+		
+		StepVerifier.create(pokemonService.save(pokemonToBeSaved))
+			.expectSubscription()
+			.expectNext(pokemonValid)
+			.verifyComplete();
+		
+	}
+	
+	@Test
+	@DisplayName("update return Mono Empty when pokemon is updated")
+	void update_returnMonoEmpty_whenMonoOfPokemonIsUpdated_test() {
+
+		BDDMockito.when(pokemonRepository.save(pokemonValidUpdate))
+			.thenReturn(Mono.empty());
+		
+		StepVerifier.create(pokemonService.update(pokemonValidUpdate))
+			.expectSubscription()
+			.verifyComplete();
+		
+	}
+	
+	@Test
+	@DisplayName("save return Mono of Pokemon when pokemon is saved")
+	void delete_returnMonoEmpty_whenMonoOfPokemonIsDelete_test() {
+		
+		StepVerifier.create(pokemonService.delete(ArgumentMatchers.anyLong()))
+			.expectSubscription()
+			.verifyComplete();
 		
 	}
 
