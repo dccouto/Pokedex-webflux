@@ -4,6 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.With;
@@ -12,6 +13,7 @@ import lombok.With;
 @With
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Table("TB_POKEMON")
 public class Pokemon {
 	
