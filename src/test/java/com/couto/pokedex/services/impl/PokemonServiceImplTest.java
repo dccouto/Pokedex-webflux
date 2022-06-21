@@ -9,7 +9,6 @@ import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.couto.pokedex.entities.Pokemon;
 import com.couto.pokedex.exceptions.PokedexException;
