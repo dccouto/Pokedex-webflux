@@ -13,7 +13,7 @@ import com.couto.pokedex.repositories.PokemonRepository;
 import com.couto.pokedex.services.PokemonService;
 
 /**
- * Classe de integração
+ * Classe para teste de integração
  */
 @ExtendWith(SpringExtension.class)
 @WebFluxTest
