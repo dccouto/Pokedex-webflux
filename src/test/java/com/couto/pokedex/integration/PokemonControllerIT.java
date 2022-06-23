@@ -157,6 +157,22 @@ public class PokemonControllerIT {
 			.expectStatus().isNoContent();
 		
 	}
+	
+	@Test	  
+	@DisplayName("update return Mono Erros when pokemon not exist") 
+	void update_returnMonoErros_whenPokemonNotExist_test() {
+		BDDMockito.when(pokemonRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Mono.empty());
+		testClient
+		.put()
+		.uri("/v1/pokemon/{id}", 1L)
+		.contentType(MediaType.APPLICATION_JSON)
+		.body(BodyInserters.fromValue(pokemon))
+		.exchange()
+		.expectStatus().isNotFound()
+		.expectBody()
+		.jsonPath("$.status").isEqualTo(404);
+		
+	}
 	 
 
 	
@@ -168,6 +184,20 @@ public class PokemonControllerIT {
 			.uri("/v1/pokemon/{id}", 1L)
 			.exchange()
 			.expectStatus().isNoContent();
+
+	}
+	
+	@Test	  
+	@DisplayName("delete return Mono Erros with pokemon not found") 
+	void delete_returnMonoErros_whenPokemonNotExist_test() {
+		BDDMockito.when(pokemonRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Mono.empty());
+		testClient
+			.delete()
+			.uri("/v1/pokemon/{id}", 1L)
+			.exchange()
+			.expectStatus().isNotFound()
+			.expectBody()
+			.jsonPath("$.status").isEqualTo(404);
 
 	}
 
