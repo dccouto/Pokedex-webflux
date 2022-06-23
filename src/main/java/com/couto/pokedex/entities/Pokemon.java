@@ -1,5 +1,7 @@
 package com.couto.pokedex.entities;
 
+import javax.validation.constraints.NotEmpty;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
@@ -19,6 +21,7 @@ public class Pokemon {
 	
 	@Id
 	private Long id;
+	@NotEmpty(message = "The name of Pokemon cannot be empty")
 	private String name;
 	private String type;
 

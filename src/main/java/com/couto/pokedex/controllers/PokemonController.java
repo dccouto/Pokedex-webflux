@@ -1,5 +1,7 @@
 package com.couto.pokedex.controllers;
 
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +28,8 @@ public class PokemonController {
 	private final PokemonService pokemonService;
 
 	@PostMapping
-	public Mono<Pokemon> savePokemon(@RequestBody Pokemon pokemon) {
+	@ResponseStatus(code = HttpStatus.CREATED)
+	public Mono<Pokemon> savePokemon(@Valid @RequestBody Pokemon pokemon) {
 		return pokemonService.save(pokemon);
 
 	}

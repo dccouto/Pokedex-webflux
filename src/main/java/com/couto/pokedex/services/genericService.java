@@ -4,7 +4,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 //Interface generic
-public interface genericService<T, ID> {
+public interface GenericService<T, ID> {
 	
 	Mono<T> save(T entidade);
 
