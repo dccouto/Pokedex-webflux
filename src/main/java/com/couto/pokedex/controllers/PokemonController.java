@@ -1,5 +1,7 @@
 package com.couto.pokedex.controllers;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
@@ -32,6 +34,13 @@ public class PokemonController {
 	public Mono<Pokemon> savePokemon(@Valid @RequestBody Pokemon pokemon) {
 		return pokemonService.save(pokemon);
 
+	}
+	
+	@PostMapping("/batch")
+	@ResponseStatus(code = HttpStatus.CREATED)
+	public Flux<Pokemon> saveBatchPokemon(@RequestBody List<Pokemon> pokemons) {
+		return pokemonService.saveAll(pokemons);
+		
 	}
 	
 	@GetMapping

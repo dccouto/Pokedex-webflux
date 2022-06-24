@@ -1,7 +1,10 @@
 package com.couto.pokedex.services.impl;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.couto.pokedex.entities.Pokemon;
 import com.couto.pokedex.exceptions.PokedexException;
@@ -18,11 +21,18 @@ public class PokemonServiceImpl implements PokemonService {
 
 	private final PokemonRepository pokemonRepository;
 
+	@Transactional
 	@Override
 	public Mono<Pokemon> save(Pokemon pokemon) {
 		return pokemonRepository.save(pokemon);
 	}
-
+	
+	@Transactional
+	@Override
+	public Flux<Pokemon> saveAll(List<Pokemon> pokemons) {
+		return pokemonRepository.saveAll(pokemons);
+	}
+	
 	@Override
 	public Flux<Pokemon> findAll() {
 		return pokemonRepository.findAll();
@@ -39,6 +49,7 @@ public class PokemonServiceImpl implements PokemonService {
 		return pokemonRepository.findByName(name);
 	}
 
+	@Transactional
 	@Override
 	public Mono<Void> update(Pokemon pokemon){
 		return findById(pokemon.getId())
