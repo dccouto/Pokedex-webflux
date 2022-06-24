@@ -1,5 +1,7 @@
 package com.couto.pokedex.integration;
 
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,7 +30,7 @@ import reactor.core.publisher.Mono;
 @ExtendWith(SpringExtension.class)
 @WebFluxTest
 @Import(PokemonServiceImpl.class)
-public class PokemonControllerIT {
+public class PokemonControllerTestIT {
 
 	@MockBean
 	private PokemonRepository pokemonRepository;
@@ -47,6 +49,8 @@ public class PokemonControllerIT {
 		BDDMockito.when(pokemonRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Mono.just(pokemon));
 
 		BDDMockito.when(pokemonRepository.save(pokemon)).thenReturn(Mono.just(pokemon));
+		
+		BDDMockito.when(pokemonRepository.saveAll(List.of(pokemon))).thenReturn(Flux.just(pokemon));
 
 		BDDMockito.when(pokemonRepository.delete(pokemon)).thenReturn(Mono.empty());
 
@@ -142,8 +146,6 @@ public class PokemonControllerIT {
 	  
 	  }
 	 
-
-	
 	@Test	  
 	@DisplayName("update return Mono Empty when pokemon is updated") 
 	void update_returnMonoEmpty_whenMonoOfPokemonIsUpdated_test() {
@@ -168,11 +170,29 @@ public class PokemonControllerIT {
 		.contentType(MediaType.APPLICATION_JSON)
 		.body(BodyInserters.fromValue(pokemon))
 		.exchange()
-		.expectStatus().isNotFound()
-		.expectBody()
-		.jsonPath("$.status").isEqualTo(404);
+		.expectStatus().isNotFound();
 		
 	}
+	
+	
+	
+	
+	
+	@Test	  
+	@DisplayName("save Batch return Flux of Pokemon when list of pokemon is saved") 
+	void save_returnFluxOfPokemon_whenListOfPokemonIsSaved_test() {
+		testClient
+			.post()
+		  	.uri("/v1/pokemon/batch")
+		  	.contentType(MediaType.APPLICATION_JSON)
+		  	.body(BodyInserters.fromValue(List.of(pokemon)))
+		  	.exchange()
+		  	.expectStatus().isCreated()
+		  	.expectBody()
+		  	.jsonPath("$.[0].id").isEqualTo(pokemon.getId());
+	  
+	  }
+	
 	 
 
 	

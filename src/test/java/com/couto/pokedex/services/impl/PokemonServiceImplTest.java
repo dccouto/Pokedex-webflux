@@ -1,5 +1,7 @@
 package com.couto.pokedex.services.impl;
 
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -45,6 +47,9 @@ class PokemonServiceImplTest {
 		
 		BDDMockito.when(pokemonRepository.save(pokemonToBeSaved))
 			.thenReturn(Mono.just(pokemonValid));
+		
+		BDDMockito.when(pokemonRepository.saveAll(List.of(pokemonToBeSaved, pokemonToBeSaved)))
+			.thenReturn(Flux.just(pokemonValid, pokemonValid));
 		
 		BDDMockito.when(pokemonRepository.delete(pokemonValid))
 			.thenReturn(Mono.empty());
@@ -113,6 +118,17 @@ class PokemonServiceImplTest {
 		
 		StepVerifier.create(pokemonService.update(pokemonValidUpdate))
 			.expectSubscription()
+			.verifyComplete();
+		
+	}
+	
+	@Test
+	@DisplayName("save batch of Pokemon return Flux of Pokemon when list pokemon is saved")
+	void save_returnFluxOfPokemon_whenListOfPokemonIsSaved_test() {
+		
+		StepVerifier.create(pokemonService.saveAll(List.of(pokemonToBeSaved, pokemonToBeSaved)))
+			.expectSubscription()
+			.expectNext(pokemonValid, pokemonValid)
 			.verifyComplete();
 		
 	}

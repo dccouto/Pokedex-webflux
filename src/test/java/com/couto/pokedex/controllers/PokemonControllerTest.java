@@ -1,5 +1,7 @@
 package com.couto.pokedex.controllers;
 
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,6 +41,8 @@ class PokemonControllerTest {
 		BDDMockito.when(pokemonService.buscaPorNome(ArgumentMatchers.anyString())).thenReturn(Flux.just(pokemonValid));
 
 		BDDMockito.when(pokemonService.save(pokemonToBeSaved)).thenReturn(Mono.just(pokemonValid));
+		
+		BDDMockito.when(pokemonService.saveAll(List.of(pokemonToBeSaved))).thenReturn(Flux.just(pokemonValid));
 
 		BDDMockito.when(pokemonService.delete(ArgumentMatchers.anyLong())).thenReturn(Mono.empty());
 		
@@ -78,10 +82,22 @@ class PokemonControllerTest {
 	@DisplayName("save return Mono of Pokemon when pokemon is saved")
 	void save_returnMonoOfPokemon_whenMonoOfPokemonIsSaved_test() {
 
-		StepVerifier.create(pokemonController.savePokemon(pokemonToBeSaved)).expectSubscription()
-				.expectNext(pokemonValid)
-				.verifyComplete();
+		StepVerifier.create(pokemonController.savePokemon(pokemonToBeSaved))
+			.expectSubscription()
+			.expectNext(pokemonValid)
+			.verifyComplete();
 
+	}
+	
+	@Test
+	@DisplayName("saveBatch return Flux of Pokemon when List of pokemon is saved")
+	void saveBatch_returnFluxOfPokemon_whenListOfPokemonIsSaved_test() {
+		
+		StepVerifier.create(pokemonController.saveBatchPokemon(List.of(pokemonToBeSaved)))
+			.expectSubscription()
+			.expectNext(pokemonValid)
+			.verifyComplete();
+		
 	}
 
 	@Test
