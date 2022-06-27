@@ -4,7 +4,6 @@ import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import com.couto.pokedex.entities.User;
 import com.couto.pokedex.repositories.UserRepository;
 
 import lombok.RequiredArgsConstructor;
