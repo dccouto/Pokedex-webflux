@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,6 +45,7 @@ public class PokemonController {
 	}
 	
 	@GetMapping
+	@PreAuthorize("hasRole('ADMIN')")
 	public Flux<Pokemon> findAllPokemon() {
 		return pokemonService.findAll();
 		
